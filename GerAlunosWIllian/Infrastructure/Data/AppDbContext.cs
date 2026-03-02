@@ -1,7 +1,7 @@
-﻿using GerAlunosWIllian.Models;
+﻿using GerAlunosWIllian.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerAlunosWIllian.Data
+namespace GerAlunosWIllian.Infrastructure.Data
 {
     public class AppDbContext : DbContext
     {

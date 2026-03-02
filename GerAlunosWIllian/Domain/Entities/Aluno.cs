@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GerAlunosWIllian.Models
+namespace GerAlunosWIllian.Domain.Entities
 {
     public class Aluno
     {
-        [Key]
         public int Id { get; set; }
 
         public string FirstName { get; set; }   

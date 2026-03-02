@@ -1,4 +1,7 @@
-using GerAlunosWIllian.Data;
+using GerAlunosWIllian.Application.Services;
+using GerAlunosWIllian.Domain.Interfaces;
+using GerAlunosWIllian.Infrastructure.Data;
+using GerAlunosWIllian.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,9 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("AppDbConnectionString");
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
+builder.Services.AddScoped<IAlunoService, AlunoService>();
 
 var app = builder.Build();
 

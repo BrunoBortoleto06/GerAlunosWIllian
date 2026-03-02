@@ -1,47 +1,39 @@
-﻿using GerAlunosWIllian.Data;
-using GerAlunosWIllian.Models;
-using Microsoft.AspNetCore.Http;
+﻿using GerAlunosWIllian.Application.Services;
+using GerAlunosWIllian.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace GerAlunosWIllian.Controllers
 {
-    [Route("api/[controller]")] //pega o nome automatico de AlunosController e transforma em api/alunos
+    [Route("api/[controller]")]
     [ApiController]
     public class AlunosController : ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IAlunoService _alunoService;
 
-        public AlunosController(AppDbContext appDbContext)
+        public AlunosController(IAlunoService alunoService)
         {
-            _appDbContext = appDbContext;
+            _alunoService = alunoService;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddAluno(Aluno aluno)
         {
-            _appDbContext.Alunos.Add(aluno);
-            await _appDbContext.SaveChangesAsync();
-
+            await _alunoService.AdicionarAsync(aluno);
             return Ok(aluno);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Aluno>>> GetAlunos()
         {
-            var alunos = await _appDbContext.Alunos.ToListAsync();
+            var alunos = await _alunoService.ObterTodosAsync();
             return Ok(alunos);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Aluno>> GetAluno(int id)
         {
-            var aluno = await _appDbContext.Alunos.FindAsync(id);
-
-            if (aluno == null)
-            {
-                return NotFound("Personagem não encontrado!");
-            }
+            var aluno = await _alunoService.ObterPorIdAsync(id);
+            if (aluno == null) return NotFound("Aluno não encontrado!");
 
             return Ok(aluno);
         }
@@ -49,41 +41,21 @@ namespace GerAlunosWIllian.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAluno(int id, [FromBody] Aluno alunoAtualizado)
         {
-            var alunoDesatualizado = await _appDbContext.Alunos.FindAsync(id);
+            var sucesso = await _alunoService.AtualizarAsync(id, alunoAtualizado);
 
-            if (alunoDesatualizado == null)
-            {
-                return NotFound("Personagem não encontrado!");
-            }
+            if (!sucesso) return NotFound("Aluno não encontrado!");
 
-            _appDbContext.Entry(alunoDesatualizado).CurrentValues.SetValues(alunoAtualizado);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return StatusCode(201, alunoDesatualizado);
-
+            return StatusCode(201, alunoAtualizado);
         }
 
         [HttpDelete("{id}")]
-
         public async Task<IActionResult> DeleteAluno(int id)
         {
-            var aluno = await _appDbContext.Alunos.FindAsync(id);
+            var sucesso = await _alunoService.DeletarAsync(id);
 
-            if (aluno == null)
-            {
-                return NotFound("Personagem não encontrado!");
-            }
+            if (!sucesso) return NotFound("Aluno não encontrado!");
 
-            _appDbContext.Alunos.Remove(aluno);
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok("Personagem deletado com sucesso!");
-
+            return Ok("Aluno deletado com sucesso!");
         }
-
-
     }
-
 }
