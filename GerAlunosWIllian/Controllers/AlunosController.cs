@@ -1,4 +1,5 @@
-﻿using GerAlunosWIllian.Application.Services;
+﻿using GerAlunosWIllian.Application.DTOs;
+using GerAlunosWIllian.Application.Services;
 using GerAlunosWIllian.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,17 @@ namespace GerAlunosWIllian.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAluno(Aluno aluno)
+        public async Task<IActionResult> AddAluno([FromBody] CreateAlunoDTO alunoDto)
         {
-            await _alunoService.AdicionarAsync(aluno);
-            return Ok(aluno);
+            try
+            {
+                await _alunoService.AdicionarAsync(alunoDto);
+                return StatusCode(201, alunoDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -30,16 +38,17 @@ namespace GerAlunosWIllian.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Aluno>> GetAluno(int id)
+        public async Task<ActionResult<Aluno>> GetAluno(Guid id)
         {
             var aluno = await _alunoService.ObterPorIdAsync(id);
+
             if (aluno == null) return NotFound("Aluno não encontrado!");
 
             return Ok(aluno);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAluno(int id, [FromBody] Aluno alunoAtualizado)
+        public async Task<IActionResult> UpdateAluno(Guid id, [FromBody] Aluno alunoAtualizado)
         {
             var sucesso = await _alunoService.AtualizarAsync(id, alunoAtualizado);
 
@@ -49,7 +58,7 @@ namespace GerAlunosWIllian.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAluno(int id)
+        public async Task<IActionResult> DeleteAluno(Guid id)
         {
             var sucesso = await _alunoService.DeletarAsync(id);
 

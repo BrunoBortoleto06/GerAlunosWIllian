@@ -1,6 +1,6 @@
-﻿namespace GerAlunosWIllian.Domain.Entities
+﻿namespace GerAlunosWIllian.Application.DTOs
 {
-    public class Aluno : EntityBase
+    public class CreateAlunoDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -19,7 +19,7 @@ namespace GerAlunosWIllian.Infrastructure.Repositories
             return await _context.Alunos.ToListAsync();
         }
 
-        public async Task<Aluno> ObterPorIdAsync(int id)
+        public async Task<Aluno> ObterPorIdAsync(Guid id)
         {
             return await _context.Alunos.FindAsync(id);
         }
@@ -36,7 +36,7 @@ namespace GerAlunosWIllian.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeletarAsync(int id)
+        public async Task DeletarAsync(Guid id)
         {
             var aluno = await _context.Alunos.FindAsync(id);
             if (aluno != null)

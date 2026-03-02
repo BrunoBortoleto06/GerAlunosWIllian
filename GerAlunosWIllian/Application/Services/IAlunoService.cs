@@ -1,13 +1,14 @@
-﻿using GerAlunosWIllian.Domain.Entities;
+﻿using GerAlunosWIllian.Application.DTOs;
+using GerAlunosWIllian.Domain.Entities;
 
 namespace GerAlunosWIllian.Application.Services
 {
     public interface IAlunoService
     {
         Task<IEnumerable<Aluno>> ObterTodosAsync();
-        Task<Aluno> ObterPorIdAsync(int id);
-        Task AdicionarAsync(Aluno aluno);
-        Task<bool> AtualizarAsync(int id, Aluno alunoAtualizado);
-        Task<bool> DeletarAsync(int id);
+        Task<Aluno> ObterPorIdAsync(Guid id);
+        Task AdicionarAsync(CreateAlunoDTO alunoDto);
+        Task<bool> AtualizarAsync(Guid id, Aluno alunoAtualizado);
+        Task<bool> DeletarAsync(Guid id);
     }
 }

@@ -5,9 +5,9 @@ namespace GerAlunosWIllian.Domain.Interfaces
     public interface IAlunoRepository
     {
         Task<IEnumerable<Aluno>> ObterTodosAsync();
-        Task<Aluno> ObterPorIdAsync(int id);
+        Task<Aluno> ObterPorIdAsync(Guid id);
         Task AdicionarAsync(Aluno aluno);
         Task AtualizarAsync(Aluno aluno);
-        Task DeletarAsync(int id);
+        Task DeletarAsync(Guid id);
     }
 }
