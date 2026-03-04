@@ -16,12 +16,17 @@ namespace GerAlunosWIllian.Infrastructure.Repositories
 
         public async Task<IEnumerable<Aluno>> ObterTodosAsync()
         {
-            return await _context.Alunos.ToListAsync();
+            return await _context.Alunos.Include(a => a.Curso).ToListAsync();
         }
 
         public async Task<Aluno> ObterPorIdAsync(Guid id)
         {
-            return await _context.Alunos.FindAsync(id);
+            return await _context.Alunos.Include(a => a.Curso).FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<bool> EmailJaExisteAsync(string email)
+        {
+            return await _context.Alunos.AnyAsync(a => a.Email == email);
         }
 
         public async Task AdicionarAsync(Aluno aluno)

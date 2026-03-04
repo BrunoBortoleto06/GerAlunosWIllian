@@ -44,11 +44,17 @@ namespace GerAlunosWIllian.Application.Services
                 throw new Exception("O email deve finalizar com @faculdade.edu para ser válido");
             }
 
+            if (await _alunoRepository.EmailJaExisteAsync(emailLimpo))
+            {
+                throw new Exception("Este e-mail já está em uso por outro aluno.");
+            }
+
             var novoAluno = new Aluno
             {
                 FirstName = firstNameLimpo,
                 LastName = alunoDto.LastName.Trim(),
-                Email = emailLimpo
+                Email = emailLimpo,
+                CursoId = alunoDto.CursoId
             };
 
             await _alunoRepository.AdicionarAsync(novoAluno);

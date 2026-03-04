@@ -6,6 +6,7 @@ namespace GerAlunosWIllian.Domain.Interfaces
     {
         Task<IEnumerable<Aluno>> ObterTodosAsync();
         Task<Aluno> ObterPorIdAsync(Guid id);
+        Task<bool> EmailJaExisteAsync(string email);
         Task AdicionarAsync(Aluno aluno);
         Task AtualizarAsync(Aluno aluno);
         Task DeletarAsync(Guid id);
